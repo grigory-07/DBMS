@@ -1,0 +1,429 @@
+1) test> use college
+switched to db college
+college> db.createCollection("stud")
+{ ok: 1 }
+
+2) college> db.s2mca.insert({roll:1,name:'ram',age:20,div:'A',sub:['phy','che'],credit:5});
+DeprecationWarning: Collection.insert() is deprecated. Use insertOne, insertMany, or bulkWrite.
+{
+  acknowledged: true,
+  insertedIds: { '0': ObjectId('661397bb7fb445125b8bf202') }
+}
+college>  db.s2mca.insert({roll:2,name:'sam',age:21,div:'B',sub:['phy','Mat'],credit:4});
+{
+  acknowledged: true,
+  insertedIds: { '0': ObjectId('6613984e7fb445125b8bf203') }
+}
+college>  db.s2mca.insert({roll:3,name:'tam',age:20,div:'C',sub:['phy','Eng'],credit:3});
+{
+  acknowledged: true,
+  insertedIds: { '0': ObjectId('661398847fb445125b8bf204') }
+}
+college> db.s2mca.find()
+[
+  {
+    _id: ObjectId('661397bb7fb445125b8bf202'),
+    roll: 1,
+    name: 'ram',
+    age: 20,
+    div: 'A',
+    sub: [ 'phy', 'che' ],
+    credit: 5
+  },
+  {
+    _id: ObjectId('6613984e7fb445125b8bf203'),
+    roll: 2,
+    name: 'sam',
+    age: 21,
+    div: 'B',
+    sub: [ 'phy', 'Mat' ],
+    credit: 4
+  },
+  {
+    _id: ObjectId('661398847fb445125b8bf204'),
+    roll: 3,
+    name: 'tam',
+    age: 20,
+    div: 'C',
+    sub: [ 'phy', 'Eng' ],
+    credit: 3
+  }
+]
+3)college> db.s2mca.aggregate([{$group:{_id:'$div',total_st:{$sum:1},max_age:{$max:'$age'}}}])
+[
+  { _id: 'C', total_st: 1, max_age: 20 },
+  { _id: 'A', total_st: 1, max_age: 20 },
+  { _id: 'B', total_st: 1, max_age: 21 }
+]
+college> db.s2mca.aggregate([{$match:{age:{$gt:20}}}])
+[
+  {
+    _id: ObjectId('6613984e7fb445125b8bf203'),
+    roll: 2,
+    name: 'sam',
+    age: 21,
+    div: 'B',
+    sub: [ 'phy', 'Mat' ],
+    credit: 4
+  }
+]
+college> db.s2mca.aggregate([{'$sort':{'age':1}}]);
+[
+  {
+    _id: ObjectId('661397bb7fb445125b8bf202'),
+    roll: 1,
+    name: 'ram',
+    age: 20,
+    div: 'A',
+    sub: [ 'phy', 'che' ],
+    credit: 5
+  },
+  {
+    _id: ObjectId('661398847fb445125b8bf204'),
+    roll: 3,
+    name: 'tam',
+    age: 20,
+    div: 'C',
+    sub: [ 'phy', 'Eng' ],
+    credit: 3
+  },
+  {
+    _id: ObjectId('6613984e7fb445125b8bf203'),
+    roll: 2,
+    name: 'sam',
+    age: 21,
+    div: 'B',
+    sub: [ 'phy', 'Mat' ],
+    credit: 4
+  }
+]
+college> db.s2mca.aggregate([{'$sort':{'age':-1}}])
+[
+  {
+    _id: ObjectId('6613984e7fb445125b8bf203'),
+    roll: 2,
+    name: 'sam',
+    age: 21,
+    div: 'B',
+    sub: [ 'phy', 'Mat' ],
+    credit: 4
+  },
+  {
+    _id: ObjectId('661397bb7fb445125b8bf202'),
+    roll: 1,
+    name: 'ram',
+    age: 20,
+    div: 'A',
+    sub: [ 'phy', 'che' ],
+    credit: 5
+  },
+  {
+    _id: ObjectId('661398847fb445125b8bf204'),
+    roll: 3,
+    name: 'tam',
+    age: 20,
+    div: 'C',
+    sub: [ 'phy', 'Eng' ],
+    credit: 3
+  }
+]
+college> db.s2mca.aggregate([{$match:{div:"A"}},{'$sort':{'age':-1}},{$limit:1}])
+[
+  {
+    _id: ObjectId('661397bb7fb445125b8bf202'),
+    roll: 1,
+    name: 'ram',
+    age: 20,
+    div: 'A',
+    sub: [ 'phy', 'che' ],
+    credit: 5
+  }
+]
+college> db.s2mca.aggregate([{$unwind:'$sub'}]);
+[
+  {
+    _id: ObjectId('661397bb7fb445125b8bf202'),
+    roll: 1,
+    name: 'ram',
+    age: 20,
+    div: 'A',
+    sub: 'phy',
+    credit: 5
+  },
+  {
+    _id: ObjectId('661397bb7fb445125b8bf202'),
+    roll: 1,
+    name: 'ram',
+    age: 20,
+    div: 'A',
+    sub: 'che',
+    credit: 5
+  },
+  {
+    _id: ObjectId('6613984e7fb445125b8bf203'),
+    roll: 2,
+    name: 'sam',
+    age: 21,
+    div: 'B',
+    sub: 'phy',
+    credit: 4
+  },
+  {
+    _id: ObjectId('6613984e7fb445125b8bf203'),
+    roll: 2,
+    name: 'sam',
+    age: 21,
+    div: 'B',
+    sub: 'Mat',
+    credit: 4
+  },
+  {
+    _id: ObjectId('661398847fb445125b8bf204'),
+    roll: 3,
+    name: 'tam',
+    age: 20,
+    div: 'C',
+    sub: 'phy',
+    credit: 3
+  },
+  {
+    _id: ObjectId('661398847fb445125b8bf204'),
+    roll: 3,
+    name: 'tam',
+    age: 20,
+    div: 'C',
+    sub: 'Eng',
+    credit: 3
+  }
+]
+college>
+college> db.s2mca.aggregate([{$group:{_id:'roll',averageAge:{$avg:'$age'}}}]);
+[ { _id: 'roll', averageAge: 20.333333333333332 } ]
+college> db.s2mca.aggregate([{$group:{_id:'$gender',count:{$sum:1}}}]);
+[ { _id: null, count: 3 } ]
+college> db.s2mca.aggregate([{$sort:{credit:-1}},{$limit:1}])
+[
+  {
+    _id: ObjectId('661397bb7fb445125b8bf202'),
+    roll: 1,
+    name: 'ram',
+    age: 20,
+    div: 'A',
+    sub: [ 'phy', 'che' ],
+    credit: 5
+  }
+]
+college> db.s2mca.find({name:/^j/});
+
+college> db.s2mca.find({name:/^t/});
+[
+  {
+    _id: ObjectId('661398847fb445125b8bf204'),
+    roll: 3,
+    name: 'tam',
+    age: 20,
+    div: 'C',
+    sub: [ 'phy', 'Eng' ],
+    credit: 3
+  }
+]
+college> db.s2mca.find({sub:/che/});
+[
+  {
+    _id: ObjectId('661397bb7fb445125b8bf202'),
+    roll: 1,
+    name: 'ram',
+    age: 20,
+    div: 'A',
+    sub: [ 'phy', 'che' ],
+    credit: 5
+  }
+]
+
+college> db.s2mca.find({ sub: /Eng/ });
+[
+  {
+    _id: ObjectId('661398847fb445125b8bf204'),
+    roll: 3,
+    name: 'tam',
+    age: 20,
+    div: 'C',
+    sub: [ 'phy', 'Eng' ],
+    credit: 3
+  }
+]
+college>
+college> db.s2mca.find({name:/sam/i});
+[
+  {
+    _id: ObjectId('6613984e7fb445125b8bf203'),
+    roll: 2,
+    name: 'sam',
+    age: 21,
+    div: 'B',
+    sub: [ 'phy', 'Mat' ],
+    credit: 4
+  }
+]
+
+
+
+
+
+
+
+                       GIVEN PROBLEM FOR LAB WORK
+==============================================================================
+problem
+1.create database named univ and collection named s1mca
+2.List all female students
+3.List all male students
+4.Find total number of students in each department
+5.display dpmt name and sum of all male employees in each department
+6.display dpmt name and avg marks in each department
+
+
+-------------------------------------------
+CODE
+============
+1) college> use univ;
+switched to db univ
+univ> db.mca.insertMany([{roll:1,name:'ram',age:20,div:'A',dept:"ai",mark:50,gender:"male"},{roll:2,name:'sam',age:20,div:'A',dept:"ai",mark:51,gender:"male"},{roll:3,name:'tam',age:20,div:'B',dept:"Ml",mark:52,gender:"male"},{roll:4,name:'dam',age:21,div:'C',dept:"mca",mark:60,gender:"male"}]);
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('6613b3d17fb445125b8bf209'),
+    '1': ObjectId('6613b3d17fb445125b8bf20a'),
+    '2': ObjectId('6613b3d17fb445125b8bf20b'),
+    '3': ObjectId('6613b3d17fb445125b8bf20c')
+  }
+}
+univ> db.mca.find();
+[
+  {
+    _id: ObjectId('6613b3d17fb445125b8bf209'),
+    roll: 1,
+    name: 'ram',
+    age: 20,
+    div: 'A',
+    dept: 'ai',
+    mark: 50,
+    gender: 'male'
+  },
+  {
+    _id: ObjectId('6613b3d17fb445125b8bf20a'),
+    roll: 2,
+    name: 'sam',
+    age: 20,
+    div: 'A',
+    dept: 'ai',
+    mark: 51,
+    gender: 'male'
+  },
+  {
+    _id: ObjectId('6613b3d17fb445125b8bf20b'),
+    roll: 3,
+    name: 'tam',
+    age: 20,
+    div: 'B',
+    dept: 'Ml',
+    mark: 52,
+    gender: 'male'
+  },
+  {
+    _id: ObjectId('6613b3d17fb445125b8bf20c'),
+    roll: 4,
+    name: 'dam',
+    age: 21,
+    div: 'C',
+    dept: 'mca',
+    mark: 60,
+    gender: 'male'
+  }
+]
+univ> db.mca.aggregate([{$group:{_id:'$gender',count:{$sum:1}}}]);
+[ { _id: 'male', count: 4 } ]
+univ>  db.mca.insert([{roll:5,name:'ham',age:22,div:'D',dept:"CS",mark:50,gender:"female"}]);
+{
+  acknowledged: true,
+  insertedIds: { '0': ObjectId('6613b9617fb445125b8bf20d') }
+}
+
+2)  univ> db.mca.find({ gender: "female" });
+[
+  {
+    _id: ObjectId('6613b9617fb445125b8bf20d'),
+    roll: 5,
+    name: 'ham',
+    age: 22,
+    div: 'D',
+    dept: 'CS',
+    mark: 50,
+    gender: 'female'
+  }
+]
+univ>
+
+3) univ> db.mca.find({ gender: "male" });
+[
+  {
+    _id: ObjectId('6613b3d17fb445125b8bf209'),
+    roll: 1,
+    name: 'ram',
+    age: 20,
+    div: 'A',
+    dept: 'ai',
+    mark: 50,
+    gender: 'male'
+  },
+  {
+    _id: ObjectId('6613b3d17fb445125b8bf20a'),
+    roll: 2,
+    name: 'sam',
+    age: 20,
+    div: 'A',
+    dept: 'ai',
+    mark: 51,
+    gender: 'male'
+  },
+  {
+    _id: ObjectId('6613b3d17fb445125b8bf20b'),
+    roll: 3,
+    name: 'tam',
+    age: 20,
+    div: 'B',
+    dept: 'Ml',
+    mark: 52,
+    gender: 'male'
+  },
+  {
+    _id: ObjectId('6613b3d17fb445125b8bf20c'),
+    roll: 4,
+    name: 'dam',
+    age: 21,
+    div: 'C',
+    dept: 'mca',
+    mark: 60,
+    gender: 'male'
+  }
+]
+
+
+4) univ> db.mca.aggregate([ { $group: { _id: "$dept", totalStudents: { $sum: 1 } } }] );
+[
+  { _id: 'Ml', totalStudents: 1 },
+  { _id: 'mca', totalStudents: 1 },
+  { _id: 'ai', totalStudents: 2 }
+]
+5) univ> db.mca.aggregate([{$match: { gender: "male" }},{ $group: {_id: "$dept",totalMaleEmployees: { $sum: 1 }} }]);
+[
+  { _id: 'Ml', totalMaleEmployees: 1 },
+  { _id: 'mca', totalMaleEmployees: 1 },
+  { _id: 'ai', totalMaleEmployees: 2 }
+
+6) univ> db.mca.aggregate([{$group: {_id: "$dept",avgMarks: { $avg: "$mark" } }}]);
+[
+  { _id: 'Ml', avgMarks: 52 },
+  { _id: 'mca', avgMarks: 60 },
+  { _id: 'ai', avgMarks: 50.5 }
+]

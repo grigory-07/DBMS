@@ -1,0 +1,100 @@
+university>
+university> db.createCollection("dept")
+{ ok: 1 }
+university> db.createCollection("emp")
+{ ok: 1 }
+university> db.emp.insert([{emp_id:1,empname:"Athullaya",empdept:"MCA",salary:20000},{emp_id:2,empname:"BIBIN",empdept:"MCA",salary:50000},{emp_id:3,empname:Devanarayanan,empdept:"CS",salary:40000},{emp_id:4,empname:"Gibin",empdept:"AI",salary:30000},{emp_id:5,empname:"Arjun",empdept:"ML",salary:45000},{emp_id:6,empname:"Alvin",empdept:"poli",salary:35000}])
+ReferenceError: Devanarayanan is not defined
+university> db.emp.insert([{emp_id:1,empname:"Athullaya",empdept:"MCA",salary:20000},{emp_id:2,empname:"BIBIN",empdept:"MCA",salary:50000},{emp_id:3,empname:"Devanarayanan",empdept:"CS",salary:40000},{emp_id:4,empname:"Gibin",empdept:"AI",salary:30000},{emp_id:5,empname:"Arjun",empdept:"ML",salary:45000},{emp_id:6,empname:"Alvin",empdept:"poli",salary:35000}])
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('65f7dc762161616c768bf209'),
+    '1': ObjectId('65f7dc762161616c768bf20a'),
+    '2': ObjectId('65f7dc762161616c768bf20b'),
+    '3': ObjectId('65f7dc762161616c768bf20c'),
+    '4': ObjectId('65f7dc762161616c768bf20d'),
+    '5': ObjectId('65f7dc762161616c768bf20e')
+  }
+}
+university> db.emp.find().pretty()
+[
+  {
+    _id: ObjectId('65f7dc762161616c768bf209'),
+    emp_id: 1,
+    empname: 'Athullaya',
+    empdept: 'MCA',
+    salary: 20000
+  },
+  {
+    _id: ObjectId('65f7dc762161616c768bf20a'),
+    emp_id: 2,
+    empname: 'BIBIN',
+    empdept: 'MCA',
+    salary: 50000
+  },
+  {
+    _id: ObjectId('65f7dc762161616c768bf20b'),
+    emp_id: 3,
+    empname: 'Devanarayanan',
+    empdept: 'CS',
+    salary: 40000
+  },
+  {
+    _id: ObjectId('65f7dc762161616c768bf20c'),
+    emp_id: 4,
+    empname: 'Gibin',
+    empdept: 'AI',
+    salary: 30000
+  },
+  {
+    _id: ObjectId('65f7dc762161616c768bf20d'),
+    emp_id: 5,
+    empname: 'Arjun',
+    empdept: 'ML',
+    salary: 45000
+  },
+  {
+    _id: ObjectId('65f7dc762161616c768bf20e'),
+    emp_id: 6,
+    empname: 'Alvin',
+    empdept: 'poli',
+    salary: 35000
+  }
+]
+university> db.dept.insert([{dptid:1,deptname:"MCA"},{dptid:2,deptname:"CA"},{dptid:3,deptname:"CS"}])
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('65f7dd562161616c768bf20f'),
+    '1': ObjectId('65f7dd562161616c768bf210'),
+    '2': ObjectId('65f7dd562161616c768bf211')
+  }
+}
+university> db.dept.find().pretty()
+[
+  {
+    _id: ObjectId('65f7dd562161616c768bf20f'),
+    dptid: 1,
+    deptname: 'MCA'
+  },
+  {
+    _id: ObjectId('65f7dd562161616c768bf210'),
+    dptid: 2,
+    deptname: 'CA'
+  },
+  {
+    _id: ObjectId('65f7dd562161616c768bf211'),
+    dptid: 3,
+    deptname: 'CS'
+  }
+]
+university>
+university> db.dept.drop()
+true
+university> use bibin
+switched to db bibin
+
+bibin> db.dropDatabase()
+{ ok: 1, dropped: 'bibin' }
+bibin>
